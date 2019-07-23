@@ -7,10 +7,12 @@ A sample serverless APP to perform OCR
 .
 ├── README.md                   <-- This instructions file
 ├── event.json                  <-- API Gateway Proxy Integration event payload
-├── hello_world                 <-- Source code for a lambda function
-│   ├── __init__.py
-│   ├── app.py                  <-- Lambda function code
-│   ├── requirements.txt        <-- Lambda function code
+├── lambda_function.py          <-- Source code for a lambda function
+├── tesseract-layer             <-- build OCR lambda layer
+│   ├── build.sh
+│   ├── Dockerfile               
+│── tesseract-layer             <-- build PIL lambda layer
+│   ├── build.sh
 ├── template.yaml               <-- SAM Template
 └── tests                       <-- Unit tests
     └── unit
@@ -31,7 +33,7 @@ A sample serverless APP to perform OCR
 **Invoking function locally using a local sample payload**
 
 ```bash
-sam local invoke HelloWorldFunction --event event.json
+sam local invoke OCRFunction --event event.json
 ```
 
 **Invoking function locally through local API Gateway**
