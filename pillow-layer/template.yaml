@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SAM Template for PIL lambda Layer
+Globals:
+    Function:
+        Timeout: 60
+
+Resources:
+    PILLambdaLayer:
+        Type: AWS::Serverless::LayerVersion
+        Properties:
+            LayerName: PILLambdaLayer
+            Description: Lambda Layer with PIL pythn 3.6
+            ContentUri: ./python36-pillow.zip
+            CompatibleRuntimes:
+                - python3.6
+                - python3.7
+            LicenseInfo: MIT
+            RetentionPolicy: Retain
+
+Outputs:
+    PILLambdaLayerARN:
+        Value: !Ref PILLambdaLayer
+        Description: PILLambdaLayer ARN
+        Export:
+            Name: pillow-lambda-layer-arn
