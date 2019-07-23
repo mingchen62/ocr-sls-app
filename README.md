@@ -1,4 +1,4 @@
-# my-sls-app
+# ocr-sls-app
 
 A sample serverless APP to perform OCR
 - Below is a brief explanation of dir struture:
@@ -53,7 +53,17 @@ Events:
             Path: /
             Method: post
 ```
-
+## Build lambda layers
+### build OCR layer
+```bash
+cd tesseract-layer
+./build.sh
+```
+### build PIL layer
+```bash
+cd pillow-layer
+./build.sh
+```
 ## Packaging and deployment
 
 AWS Lambda Python runtime requires a flat folder with all dependencies including the application. SAM will use `CodeUri` property to know where to look up for both application and dependencies:
