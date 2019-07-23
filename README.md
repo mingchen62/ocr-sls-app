@@ -1,6 +1,7 @@
 # my-sls-app
 
-This is a sample template for my-sls-app - Below is a brief explanation of what we have generated for you:
+A sample serverless APP to perform OCR
+- Below is a brief explanation of dir struture:
 
 ```bash
 .
@@ -39,7 +40,7 @@ sam local invoke HelloWorldFunction --event event.json
 sam local start-api
 ```
 
-If the previous command ran successfully you should now be able to hit the following local endpoint to invoke your function `http://localhost:3000/hello`
+If the previous command ran successfully you should now be able to hit the following local endpoint to invoke your function `http://localhost:3000/
 
 **SAM CLI** is used to emulate both Lambda and API Gateway locally and uses our `template.yaml` to understand how to bootstrap this environment (runtime, where the source code is, etc.) - The following excerpt is what the CLI will read in order to initialize an API and its routes:
 
@@ -49,8 +50,8 @@ Events:
     HelloWorld:
         Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
         Properties:
-            Path: /hello
-            Method: get
+            Path: /
+            Method: post
 ```
 
 ## Packaging and deployment
@@ -62,7 +63,7 @@ AWS Lambda Python runtime requires a flat folder with all dependencies including
     HelloWorldFunction:
         Type: AWS::Serverless::Function
         Properties:
-            CodeUri: hello_world/
+            CodeUri: ./
             ...
 ```
 
@@ -85,7 +86,7 @@ Next, the following command will create a Cloudformation Stack and deploy your S
 ```bash
 sam deploy \
     --template-file packaged.yaml \
-    --stack-name my-sls-app \
+    --stack-name ocr-sls-app \
     --capabilities CAPABILITY_IAM
 ```
 
@@ -96,7 +97,7 @@ After deployment is complete you can run the following command to retrieve the A
 ```bash
 aws cloudformation describe-stacks \
     --stack-name my-sls-app \
-    --query 'Stacks[].Outputs[?OutputKey==`HelloWorldApi`]' \
+    --query 'Stacks[].Outputs[?OutputKey==`OCRApi`]' \
     --output table
 ``` 
 
@@ -107,7 +108,7 @@ To simplify troubleshooting, SAM CLI has a command called sam logs. sam logs let
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-sam logs -n HelloWorldFunction --stack-name my-sls-app --tail
+sam logs -n OCRFunction --stack-name ocr-sls-app --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
@@ -127,24 +128,12 @@ python -m pytest tests/ -v
 In order to delete our Serverless Application recently deployed you can use the following AWS CLI Command:
 
 ```bash
-aws cloudformation delete-stack --stack-name my-sls-app
+aws cloudformation delete-stack --stack-name ocr-sls-app
 ```
 
 ## Bringing to the next level
 
-Here are a few things you can try to get more acquainted with building serverless applications using SAM:
 
-### Learn how SAM Build can help you with dependencies
-
-* Uncomment lines on `app.py`
-* Build the project with ``sam build --use-container``
-* Invoke with ``sam local invoke HelloWorldFunction --event event.json``
-* Update tests
-
-### Create an additional API resource
-
-* Create a catch all resource (e.g. /hello/{proxy+}) and return the name requested through this new path
-* Update tests
 
 ### Step-through debugging
 
@@ -200,11 +189,11 @@ sam deploy \
 
 # Describe Output section of CloudFormation stack previously created
 aws cloudformation describe-stacks \
-    --stack-name my-sls-app \
-    --query 'Stacks[].Outputs[?OutputKey==`HelloWorldApi`]' \
+    --stack-name ocr-sls-app \
+    --query 'Stacks[].Outputs[?OutputKey==`OCRApi`]' \
     --output table
 
 # Tail Lambda function Logs using Logical name defined in SAM Template
-sam logs -n HelloWorldFunction --stack-name my-sls-app --tail
+sam logs -n OCRFunction --stack-name ocr-sls-app --tail
 ```
 
