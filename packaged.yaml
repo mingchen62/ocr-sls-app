@@ -1,0 +1,62 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'ocr-app SAM Template for ocr-app
+
+  '
+Globals:
+  Function:
+    Timeout: 30
+Resources:
+  OCRFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://mc-ctct-notebooks-dev-us-east-1-eigi-datalake/ffd3766c989098335dbf838338190946
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.6
+      Role: arn:aws:iam::517600888691:role/lambda_logging_test
+      MemorySize: 1024
+      Timeout: 30
+      Environment:
+        Variables:
+          TESSDATA_PREFIX: /opt/data/tessdata
+          URL_DEFAULT_TTL: 60
+      Layers:
+      - Ref: PILLambdaLayer
+      - Ref: TessearactLambdaLayer
+      Events:
+        OCR:
+          Type: Api
+          Properties:
+            Path: /
+            Method: post
+  PILLambdaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: PILLambdaLayer
+      Description: Lambda Layer with PIL python 3.6
+      ContentUri: s3://mc-ctct-notebooks-dev-us-east-1-eigi-datalake/b7c4430216681ebc0a2e67e16ba6d5c2
+      CompatibleRuntimes:
+      - python3.6
+      LicenseInfo: MIT
+      RetentionPolicy: Retain
+  TessearactLambdaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: TessearactLambdaLayer
+      Description: Lambda Layer with Tessearact pythn 3.6
+      ContentUri: s3://mc-ctct-notebooks-dev-us-east-1-eigi-datalake/cc294602198ece2633b1ff69a48fbba1
+      CompatibleRuntimes:
+      - python3.6
+      LicenseInfo: MIT
+      RetentionPolicy: Retain
+Outputs:
+  OCRFunction:
+    Description: OCR Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - OCRFunction
+      - Arn
+  OCRApi:
+    Description: API Gateway endpoint URL for Prod stage for OCR function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod

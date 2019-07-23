@@ -1,0 +1,66 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  ocr-app
+  SAM Template for ocr-app
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+Resources:
+  OCRFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.6
+      Role: arn:aws:iam::517600888691:role/lambda_logging_test
+      MemorySize: 1024
+      Timeout: 30
+      Environment:
+        Variables:
+          TESSDATA_PREFIX: /opt/data/tessdata
+          URL_DEFAULT_TTL: 60
+      Layers: 
+        - !Ref PILLambdaLayer
+        - !Ref TessearactLambdaLayer
+      Events:
+        OCR:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /
+            Method: post   
+            #Cors:  true
+            #Auth:  none
+  PILLambdaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: PILLambdaLayer
+      Description: Lambda Layer with PIL python 3.6
+      ContentUri: pillow-layer/python36-pillow.zip
+      CompatibleRuntimes:
+        - python3.6
+      LicenseInfo: MIT
+      RetentionPolicy: Retain
+  TessearactLambdaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: TessearactLambdaLayer
+      Description: Lambda Layer with Tessearact pythn 3.6
+      ContentUri: tesseract-layer/python36-tesseract.zip
+      CompatibleRuntimes:
+        - python3.6
+      LicenseInfo: MIT
+      RetentionPolicy: Retain
+       
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  OCRFunction:
+    Description: "OCR Lambda Function ARN"
+    Value: !GetAtt OCRFunction.Arn
+  OCRApi:
+    Description: "API Gateway endpoint URL for Prod stage for OCR function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"

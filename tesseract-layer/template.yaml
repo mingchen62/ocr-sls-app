@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SAM Template for Tessearact lambda Layer
+Globals:
+    Function:
+        Timeout: 60
+
+Resources:
+    TessearactLambdaLayer:
+        Type: AWS::Serverless::LayerVersion
+        Properties:
+            LayerName: TessearactLambdaLayer
+            Description: Lambda Layer with Tessearact pythn 3.6
+            ContentUri: ./python36-tesseract.zip
+            CompatibleRuntimes:
+                - python3.6
+                - python3.7
+            LicenseInfo: MIT
+            RetentionPolicy: Retain
+
+Outputs:
+    PILLambdaLayerARN:
+        Value: !Ref TessearactLambdaLayer
+        Description: TessearactLambdaLayer ARN
+        Export:
+            Name: my-lambda-layer-arn
