@@ -64,7 +64,7 @@ cd tesseract-layer
 ### build PIL layer
 ```bash
 cd pillow-layer
-./build.sh
+./build.sh pillow
 ```
 ## Packaging and deployment
 
