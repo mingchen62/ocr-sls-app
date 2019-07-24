@@ -72,7 +72,7 @@ AWS Lambda Python runtime requires a flat folder with all dependencies including
 
 ```yaml
 ...
-    HelloWorldFunction:
+    OCRFunction:
         Type: AWS::Serverless::Function
         Properties:
             CodeUri: ./
@@ -108,7 +108,7 @@ After deployment is complete you can run the following command to retrieve the A
 
 ```bash
 aws cloudformation describe-stacks \
-    --stack-name my-sls-app \
+    --stack-name ocr-sls-app \
     --query 'Stacks[].Outputs[?OutputKey==`OCRApi`]' \
     --output table
 ``` 
@@ -180,7 +180,7 @@ All commands used throughout this document
 sam local generate-event apigateway aws-proxy > event.json
 
 # Invoke function locally with event.json as an input
-sam local invoke HelloWorldFunction --event event.json
+sam local invoke OCRFunction --event event.json
 
 # Run API Gateway locally
 sam local start-api
@@ -196,7 +196,7 @@ sam package \
 # Deploy SAM template as a CloudFormation stack
 sam deploy \
     --template-file packaged.yaml \
-    --stack-name my-sls-app \
+    --stack-name ocr-sls-app \
     --capabilities CAPABILITY_IAM
 
 # Describe Output section of CloudFormation stack previously created
