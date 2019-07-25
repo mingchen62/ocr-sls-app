@@ -11,7 +11,7 @@ A sample serverless APP to perform OCR
 ├── tesseract-layer             <-- build OCR lambda layer
 │   ├── build.sh
 │   ├── Dockerfile               
-│── tesseract-layer             <-- build PIL lambda layer
+│── pillow-layer                <-- build PIL lambda layer
 │   ├── build.sh
 ├── template.yaml               <-- SAM Template
 └── tests                       <-- Unit tests
@@ -49,7 +49,7 @@ If the previous command ran successfully you should now be able to hit the follo
 ```yaml
 ...
 Events:
-    HelloWorld:
+    OCR:
         Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
         Properties:
             Path: /
@@ -151,7 +151,7 @@ aws cloudformation delete-stack --stack-name ocr-sls-app
 
 * **[Enable step-through debugging docs for supported runtimes]((https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-using-debugging.html))**
 
-Next, you can use AWS Serverless Application Repository to deploy ready to use Apps that go beyond hello world samples and learn how authors developed their applications: [AWS Serverless Application Repository main page](https://aws.amazon.com/serverless/serverlessrepo/)
+[AWS Serverless Application Repository main page](https://aws.amazon.com/serverless/serverlessrepo/)
 
 # Appendix
 
